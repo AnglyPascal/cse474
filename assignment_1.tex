@@ -1,21 +1,16 @@
-\documentclass[article, 11pt, a4paper]{memoir}
+\documentclass[article, 12pt, a4paper]{memoir}
 \usepackage[article, noindex]{ahsan}
 
-\title{Assigment 1}
+\title{\bfseries Assigment 1}
+\author{\bfseries M Ahsan Al Mahir\\ ID: 20216007\\ ahsan.al.mahir@g.bracu.ac.bd}
 
-\setlength{\parskip}{0pt}
+\setlength{\parindent}{0pt}
 
 \begin{document}
 
 \share \maketitle 
 
 \chapter{Token Generator}
-
-\prob{}
-{}{}{
-    Program a simulation system which the tokengenerator will use to get the waiting time
-    estimation and booth assignment for custoomers and new boot opening.
-}
 
 \textbf{a. Define the system state variables and units of the model?}
 \vspace{1em}
@@ -32,16 +27,19 @@ emph={[200]append, pop, },
 emphstyle={[200]\color{defC}},
 ]
 # booth variables
-num_booth       = 3                         # initially, might increase or decrease
-booth           = {i:[]}                    # list of customers assigned to booth i
-customers       = []                        # sorted list of customers queue, the i'th
-                                            # customer has id i
-customer_object = Object(id = i,            # customer id
-                         booth_no = b,      # assigned booth no
-                         time_0 = time s,   # time of arrival
-                         wait = time s)     # waiting time
+num_booth       = 3         # initially, might increase or decrease
+booth           = {i:[]}    # list of customers assigned to booth i
+customers       = []        # sorted list of customers queue, the i'th
+                            # customer has id i
+
+class customer_object:      # contains:
+    id = i                  # customer id
+    booth_no = b            # assigned booth no
+    time_0 = time s         # time of arrival
+    wait = time s           # waiting time
 \end{lstlisting}
 \end{solution}
+
 
 \textbf{b. What are the global variables of this system?}
 \vspace{1em}
@@ -57,14 +55,14 @@ customer_object = Object(id = i,            # customer id
 \begin{solution}
     [c]
     There are several events of this system:
-    \begin{enumerate}
+    \begin{enumerate}[left=0pt]
         \item A new customer has arrived: this envokes the token generator, which will
             then do the following:
             \begin{enumerate}
-                \item find a token for that customer
-                \item creater a customer object and add it to the customer array
+                \item find a id for that customer
                 \item run a check if new booth needs to be opened, and opens one and adds
                     to the booth array.
+                \item creater a customer object and add it to the customer array
             \end{enumerate}
         \item A customer has finished taking their service: then token generator will do
             the following:
@@ -80,6 +78,7 @@ customer_object = Object(id = i,            # customer id
             \begin{enumerate}
                 \item immediately open a booth and reassign the newly opened booth to
                     every customer who has waited for more than 54m.
+                \item reassign booths to the customers
             \end{enumerate}
     \end{enumerate}
 \end{solution}
@@ -89,7 +88,8 @@ customer_object = Object(id = i,            # customer id
 
 \begin{solution}
     [d] 
-    \begin{enumerate}
+    Th organization of the simulation is as followed:
+    \begin{enumerate}[left=0pt]
         \item At first, we will initialize by creating the necessary variables, and adding
             rules to their capacity.
         \item Then we'll create a token generator program that will have several call
@@ -104,6 +104,10 @@ customer_object = Object(id = i,            # customer id
             function of the token generator. It will reassign the tokens
         \item Whenever a customer finishes their service, the system will call
             \texttt{del} function to remove that customer from the array, and re-sort it.
+        \item After assigning a token, deleting a customer or opening a new booth, the
+            token generator will call for a \texttt{reAssign()} function, that will loop
+            over the customers and assign them to booths properly, and update their serial
+            no.
     \end{enumerate}
 \end{solution}
 
@@ -119,36 +123,28 @@ customer_object = Object(id = i,            # customer id
     \end{enumerate}
 \end{solution}
 
+\newpage
 \textbf{f. From the conceptual model, name the functions/methods that will be needed to
 model the system. Define the input and output parameters of these functions/methods.}
 \vspace{1em}
 
 \begin{solution}
     [f]
-    The variables of the system will be
+    A customer token is defined as
 
 \begin{lstlisting}[
 language=Python,
-emph={[100]createToken, assignBooth, add, del, reAssign},
+emph={[100]TokenObject},
 emphstyle={[100]\color{NordRed}},
-emph={[200]append, pop, },
+emph={[200]__init__, self},
 emphstyle={[200]\color{defC}},
 ]
-# booth array holding the list of customer ids assigned to them
-booth = {1:[], 2:[], 3:[]}
-customer = []
-time_now = 0 # will increment
-\end{lstlisting}
-
-    A customer token is defined as
-
-    \begin{lstlisting}[language=Python]
 class TokenObject():
     def __init__(self, customerID, timeOfArrival, booth_no):
-        self.id = customerID
-        self.start_time = timeOfArrival
-        self.booth_no = booth_no 
-    \end{lstlisting}
+        self.id = customerID                    # unique id
+        self.start_time = timeOfArrival         # arrival time
+        self.booth_no = booth_no                # assigned booth
+\end{lstlisting}
     
     
     The token generator object is the central part of the system. It will have the
@@ -156,13 +152,15 @@ class TokenObject():
 
 \begin{lstlisting}[
 language=Python,
-emph={[100]createToken, assignBooth, add, del, reAssign},
+emph={[100]createToken, openBooth, assignBooth, add, del, reAssign},
 emphstyle={[100]\color{NordRed}},
 emph={[200]append, pop, },
 emphstyle={[200]\color{defC}},
 ]
+# it is called when adding a customer, reassigns the queue
 def assignBooth(customerID, timeOfArrival):
-    # search for an appropriate booth
+    reAssign()
+    booth_no = # search for an appropriate booth
     return booth_no
 
 def createToken(customerID, timeOfArrival):
@@ -172,25 +170,43 @@ def createToken(customerID, timeOfArrival):
                         booth_no=booth_no)
     return token
 
+# adds a fucntion to the end of the queue and reassigns the queue
 def add():
-    customerID = len(customer) + 1
-    booth_no = assignBooth(customerID, time_now)
-    customer.append(reateToken(customerID, time_now, booth_no))
+    id = len(customer) + 1
+    new_customer = createToken(id, time_now)
+    customer.append(new_customer)
+    booth[new_customer.booth_no].append(id)
     time_now += 1
-    booth[no].append(customerID)
-    reAssing()
 
+# deletes a customer who has finished servicing
 def del(customerID):
     token = customer.pop(customerID)
     reAssign()
     return token
 
+# this method updates the customer IDs and rearranges the booth arrays
 def reAssign():
-    # This is where all the magic happens, where the generator reassigns
-    # the booth numbers to each customer based on the given state
-    # no input output, only changes the overall state
+    while checkBooth():
+        openBooth()
+        for people in customer:
+            people.booth_no = findBooth(people)
+            # remove people.id from its previous booth's array,
+            # and add it to the new one
+        if checkIfAlright():
+            break
 
-    # this methon also needs to update the customer IDs and rearrange the booth arrays
+def checkBooth():
+    # runs a check to see whether new booth need to be opened.
+    # returns true if yes, and false otherwise
+
+def findBooth(people):
+    # returns the booth number this person can be assigned to
+
+def checkIfAlright():
+    # runs a check to see if the current system is stable
+    # as in no person is waiting for more than 54 mins
+    # and less than 20 people are waiting
+    # returns true if stable, false otherwise
 
 def openBooth():
     booth[len(booth)+2] = [] # create new empty booth
@@ -221,7 +237,9 @@ this system. Mention, for which computations you will need these methods.}
     arrival of customers to decide when to open a new booth.
 \end{solution}
 
-\chapter{Space Agency}
+
+\newpage
+\chapter{Will the space brick hit the earth}
 
 \textbf{a. Define the system state variables and units}
 \vspace{1em}
@@ -229,35 +247,40 @@ this system. Mention, for which computations you will need these methods.}
 \begin{solution}
     [a]
     The system state variables are as following:
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}[
+language=Python,
+emph={[100]simulate, update, hit, system, sys},
+emphstyle={[100]\color{NordRed}},
+emph={[200]earth, asteroid},
+emphstyle={[200]\color{defC}},
+]
 # Earth object
-class earth:
-    # contains:
-    earth.R         = 6.378e6 * m               # radius
-    earth.r         = 1.5e9 * m                 # gravitational pull range
-    earth.g         = 9.8 * m / s**2            # gravitational acceleration
-    earth.position  = [pos.x, pos.y, pos.z]     # earth's coordinate
-    earth.velocity  = [vel.x, vel.y, vel.z]     # earth's velocity
-    earth.w         = rad * s                   # rotational velocity
-    earth.sun_face  = [x, y, z]                 # position of the point on earth 
-                                                # that faces the sun,
-                                                # to find where the asteroid hits
+class earth:                            # contains:
+    earth.R         = 6.378e6 * m       # radius
+    earth.r         = 1.5e9 * m         # gravitational pull range
+    earth.g         = 9.8 * m / s**2    # gravitational acceleration
+    earth.position  = [x, y, z]         # earth's coordinate
+    earth.velocity  = [x, y, z]         # earth's velocity
+    earth.w         = rad * s           # rotational velocity
+    earth.mass      = 6e24 kg           # mass of earth
 
+    earth.sun_face  = [x, y, z]         # position of the point on earth that 
+                                        # faces the sun, to find where the
+                                        # asteroid hits
 # asteroid object
-class asteroid:
-    # contains:
-    asteroid.mass   = kg                        # mass
-    asteroid.pos    = [pos.x, pos.y, pos.z]     # position
-    asteroid.vel    = [vel.x, vel.y, vel.z]     # velocity
+class asteroid:                         # contains:
+    asteroid.mass   = kg                # mass
+    asteroid.pos    = [x, y, z]         # position
+    asteroid.vel    = [x, y, z]         # velocity
 
 # other system objects
-class system:
-    # contains
-    sys.detect_R    =                           # detect radius
-    sys.time_0      = 0 * s                     # time 0
-    sys.time_now    = s                         # time now             
-    sys.earth       = earth                     # earth object instance
-    sys.asteroid    = asteroid                  # asteroid object instance
+class system:                           # contains:
+    sys.detect_R    = m                 # asteroid detection radius
+    sys.G           = 6.974e-11 N*m**2/kg**2
+    sys.time_0      = 0 * s             # time 0
+    sys.time_now    = s                 # time now             
+    sys.earth       = earth             # earth object instance
+    sys.asteroid    = asteroid          # asteroid object instance
 \end{lstlisting}
 \end{solution}
 
@@ -270,9 +293,9 @@ class system:
 
 \begin{lstlisting}[
 language=Python,
-emph={[100]simulate, update, hit},
+emph={[100]simulate, update, hit, distance, gravity, vectorify},
 emphstyle={[100]\color{NordRed}},
-emph={[200]earth, asteroid},
+emph={[200]earth, asteroid, system},
 emphstyle={[200]\color{defC}},
 emph={[300]self},
 emphstyle={[300]\color{thmC}},
@@ -284,29 +307,47 @@ def simulate(dt):
         sys.update(dt) # this function will update the system
         point = self.hit()
         if point:
-            # calculate the distance from self.earth.sun_face to point
-            return point
+            # find position of the asteroid on earth w.r.t. 
+            # the self.earth.sun_face
+            pos_on_earth = # calculate position
+            return pos_on_earth
 
 # methods under system object
-def update(self, dt):
+def system.update(self, dt):
     self.earth.update(dt)
     self.asteroid.update(dt)
 
-def hit(self):
+
+def system.hit(self):
     distance =  # check distance between earth's center and asteroid center
     if distance <= self.earth.R:
         return self.asteroid.pos
     return false
 
+def system.vectorify(direction, magnitude)
+    # returns a vector
+
 # method under earth object
-def update(self, dt):
-    self.position = []  # new position, cosidering the previous velocity constant
-    self.sun_face = []  # change according to self.w
+def earth.update(self, dt):
+    self.position = []  # new position, += dt * self.vel
+    self.sun_face = []  # change according to rotational velocity
 
 # method under asteroid object
 def update(self, dt):
-    self.vel = []       # update the velocity wrt earth's gravitational pull
-    self.pos = []       # update the position for dt time
+    if self.distance > earth.r:
+        self.pos += self.vel * dt
+    else:
+        self.vel += self.gravity * dt
+        self.pos =      # update using physics formula
+
+def distance(self):
+    # returns the distance between self and earth
+
+def gravity(self):
+    direction = earth.pos - self.pos 
+    # make the unit direction
+    magnitute = earth.mass * G / self.distance()**2
+    return sys.vectorify(direction, magnitude)
 \end{lstlisting}
 \end{solution}
 
@@ -317,9 +358,9 @@ def update(self, dt):
     [c]
     There are several variables that we are getting rid of to make the computation
     simpler. Such as:
-    \begin{enumerate}
+    \begin{enumerate}[left=0pt]
         \item We aren't taking note of the earth's atmosphere. Due to the drag, the
-            velocity of the asteroid is significantly different from what we are
+            velocity of the asteroid will be significantly different from what we are
             calculating. Also air resistance creates a lot of temperature, which might
             burn the asteroid away before it reaches the earth.
         \item We aren't considering other astrological figures, such as the Moon, Jupitar
@@ -335,11 +376,11 @@ method, what are the input and output parameters?}
 
 \begin{solution}
     [d]
-    We need to use the \texttt{derivative} module from \texttt{SciPy} package. We also
-    need to compute 3D velocity and acceleration.
+    We need to use the \texttt{derivative} module from \texttt{SciPy} package. All other
+    computations are basic arithmetic.
 \end{solution}
 
-\textbf{e. Is it possible to check how the distance between the asteroid and Earth are
+\textbf{e. Is it possible to check how the distance between the asteroid and the Earth are
 changing?}
 \vspace{1em}
 
@@ -350,9 +391,9 @@ changing?}
 language=Python,
 emph={[100]simulate, update, hit},
 emphstyle={[100]\color{NordRed}},
-emph={[200]earth, asteroid},
+emph={[200]earth, asteroid, x_axis, y_axis, plt},
 emphstyle={[200]\color{defC}},
-emph={[300]self},
+emph={[300]self, append, plot, show},
 emphstyle={[300]\color{thmC}},
 ]
 x_axis = []
@@ -400,7 +441,8 @@ by}
 \end{solution}
 
 
-\chapter{Zedi}
+\newpage
+\chapter{Organic Food, do we give discounts?}
 
 \section{a}
 
@@ -476,7 +518,108 @@ def discount(months):
 
 \section{b}
 
+\textbf{i. What should be the steps to validate this model? What will be updated after the
+validation?}
+\vspace{1em}
+
+\begin{solution}
+    [b.i]
+    Madiha assumed that after the discount, the sales rate will be multiplied by three
+    times. Which might be an over or under estimation. Before making an assumption, she
+    should test it with actual data. She should study the data of other companies in the
+    market and see how giving discount on the products affected their sales rate.\\
+
+    After her analysis, she will have a better estimation of the sales rate, which might
+    better validate the simulation model.\\
+
+    Also, she needs to address the fluctuations of sales rate, seasonal demands and the
+    availability of other non-GMO crops in the market in her model.
+\end{solution}
+
+\textbf{ii. What should be the steps of verification? What is the next step after
+verification?}
+\vspace{1em}
+
+\begin{solution}
+    [b.ii]
+    To verify her testing she can do several things:
+    \begin{enumerate}
+        \item Test the simulation with different input data, and different crops.
+        \item Check of any bugs in her program by subprogramming.
+        \item Verify with other previously done simulations to see if her model is
+            producing reasonable results
+    \end{enumerate}
+
+    After verifying her model, she needs to do actual testing in the market with the
+    discount. And she should modify her model based on those data.
+\end{solution}
 
 
+\section{c}
+
+\textbf{i. What changes will you suggest to be made to your System state variables to
+update the model?}
+\vspace{1em}
+
+\begin{solution}
+    [c.i]
+    Madiha should make a product object, that will hold product specific data, and then
+    run the simulation on each product to find a discount rate that will increase the
+    profit.
+
+    \begin{lstlisting}[language=Python]
+class product:                  # contains
+    cost        = $             # production cost
+    price       = $             # base price
+    discount    = %             # discount rate
+
+    popularity  =               # popularity modifier, 1 < x < 2
+    demand      =               # variable based on factors, 1 < x < 2
+    sales_rate  = unit/mounth   # base sales rate
+    sales_mod   =               # sales rate modifier
+
+    profit_tot  = $             # total profit in 12 months
+    \end{lstlisting}
+
+    She should make multiple instances of this class for each crop, and consider the
+    various factors including public interest and seasonal demand to determine the sales
+    modifier. And she should produce individual profit for each of these crops.
+\end{solution}
+
+\textbf{ii. What will be the new equations to simulate the profit? Are there any new
+functions/methods to implement? If yes, write the functions, mentioning the input/output
+parameters. Don’t worry about being perfect, give a suggestion.}
+\vspace{1em}
+
+\begin{solution}
+    [c.ii]
+    If Madiha takes all different modifiers into consideration, the equation for sales
+    rate will change. A possible formula for the sales rate modifier would be
+    \[\text{sales\textunderscore mod} = \text{popularity} * \text{demand} *
+    \text{discount}\]      
+    And then the sales rate function would look something like
+    \[\text{sales\textunderscore rate}(t) = \text{sales\textunderscore mod}^t *
+    \text{sales\textunderscore rate}\] 
+    A function that takes in a product object and discount rate, and returns the sales
+    modifier:
+\begin{lstlisting}[
+language=Python,
+emph={[100]sales_mod},
+emphstyle={[100]\color{thmC}},
+emph={[200]product},
+emphstyle={[200]\color{NordRed}},
+]
+def sales_mod(product, discount):
+    pop = product.popularity
+    dem = product.demand
+    dis = discount
+    return pop * dem * dis
+\end{lstlisting}
+    This function takes public interest, seasonal demand into consider, and then
+    multiplies by the discount, the higher the discount, the higher the modifier.\\
+
+    Madiha needs to implement this equation in her \texttt{discount} function to find the
+    total profit output. 
+\end{solution}
 
 \end{document}
