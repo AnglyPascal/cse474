@@ -1,9 +1,7 @@
 \documentclass[article, 11pt, a4paper]{memoir}
-\usepackage[article, noindex, darkblue, serif]{ahsan}
+\usepackage[article, noindex, serif]{ahsan}
 
 % TODO: make a new command to set the dimensions of the margin, use ifthen
-\newcommand\x{30}
-\newcommand\y{\x}
 
 \title{\vspace{-3.5em}\Large\textbf{Midterm Paper Review}\\[1em] \LARGE \textbf{Social
 Percolation Models} \\ \Large Solomon, S., Weisbuch, G., Arcangelis, L., 1999} 
@@ -17,10 +15,9 @@ Percolation Models} \\ \Large Solomon, S., Weisbuch, G., Arcangelis, L., 1999}
 
 
 The paper proposes a percolation model for simulating social recommendation situations.
-The primary question it seeks to answer is ``Why do you notice extreme market shares, close
-to 0\% and 100\% in media industry". 
-
-
+The primary question it seeks to answer is ``Why do you notice extreme market shares,
+close to 0\% and 100\% in media industry". Below we give a thorough review of the model
+the authors proposed as a possible explanation to this question.
 
 
 \begin{enumerate}[left=0pt, itemsep=20pt, label={\(\square\)}]
@@ -151,7 +148,10 @@ to 0\% and 100\% in media industry".
 
     \item \textbf{Name the tools and programs the authors used for the simulation.}
 
-
+        The authors did not mention any programs or tools in their paper. But assuming
+        from their plots and simulation models, it can be inferred that their work can be
+        reproduced using python libraries \texttt{numpy, scipy.ndimage, matplotlib.pyplot}
+        and \texttt{random}.
 
     \item \textbf{What was the result of the simulation? What conclusions did the authors
         draw from their simulation output?}
@@ -172,11 +172,30 @@ to 0\% and 100\% in media industry".
     \item \textbf{How did the authors verify and validate their model? Write your
         suggestions for improvement of the model.}
 
-        Based on real life explanation, and initial conjecture
+        The model the authors developed was intended as a possible explanation for a
+        natural phenomena that cannot be explained by usual probabilistic methods. Their
+        explanation for the possible solution matches their test data, that if \(q > p_c\)
+        then the product will be a hit, and if \(q < p_c\) then it will be a miss. Which
+        is intuitively correct based on results from percolation theory. 
+
+        The results matching their initial conjectures verifies their model. To validate
+        their model, they used the model with 8 different test systems, and related the
+        results from those tests to other scientific results. Also their model
+        although theoretically, but correctly explains the hit-flop phenomena. Which gives
+        validation to their model.
 
 
     \item \textbf{Describe a new problem relevant to the paper you want to solve by
         modeling and simulation.}
+
+        At the end of the lecture, the authors conjectured that this model can be used to
+        estimate sales rate in products other than cinema as well. But they do not give
+        explanation about whether this same model could be implemented for childrens' toys
+        as in that scenerio, the neighborhood relationship between the children is not
+        nearly as important as their parents'. So estimating childrens' product poses a
+        new set of complexity that arises when we take both the childrens' and their
+        parents' preferences into account. In which case, the model might need heavy
+        modification to correctly estimate market shares.
 
 \end{enumerate}
 
