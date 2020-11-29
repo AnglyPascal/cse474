@@ -1,14 +1,184 @@
 \documentclass[article, 11pt, a4paper]{memoir}
-\usepackage[article, noindex, darkblue]{ahsan}
+\usepackage[article, noindex, darkblue, serif]{ahsan}
 
-\title{\vspace{-3.5em}Midterm Paper}
-\author{M Ahsan Al Mahir\\ BuX ID: }
+% TODO: make a new command to set the dimensions of the margin, use ifthen
+\newcommand\x{30}
+\newcommand\y{\x}
+
+\title{\vspace{-3.5em}\Large\textbf{Midterm Paper Review}\\[1em] \LARGE \textbf{Social
+Percolation Models} \\ \Large Solomon, S., Weisbuch, G., Arcangelis, L., 1999} 
+
+\author{M Ahsan Al Mahir\\ \small BuX ID: 20216007\\ \small GSuite: ahsan.al.mahir@g.bracu.ac.bd}
 
 \share
 
 \begin{document}
 \maketitle
 
+
+The paper proposes a percolation model for simulating social recommendation situations.
+The primary question it seeks to answer is ``Why do you notice extreme market shares, close
+to 0\% and 100\% in media industry". 
+
+
+
+
+\begin{enumerate}[left=0pt, itemsep=20pt, label={\(\square\)}]
+
+    \item \textbf{Which system is modeled and simulated in your selected paper? }
+
+        To answer the proposed question, the authors came up with a Monte Carlo simulation
+        based on the percolation theory, where people are considered as points on the
+        lattice, and their neighbors are considered as their acquaintances. 
+
+    \item \textbf{Why is this simulation needed? }
+
+        Under usual assumptions, market share between different products should be
+        uniformly distributed. But in reality that is not the case as many products are
+        either hits or flops, and they do not follow an uniform distribution. The
+        explanation the authors gave for this bi-modal distribution is that ``...certain
+        commodities markets is often discussed in evolutionary economics in terms of
+        bounded rationality..." (p. 240)
+
+        The social percolation model they came up with presents a possible way to predict
+        whether a product would be either a hit or a flop based on how close the quality
+        of the product is to the percolation threshold of \(2D\) lattice. So by
+        understanding their model, industries can gear their investment in increasing
+        their product quality based on the outcomes from the market.
+
+    \item \textbf{What questions did the author ask to analyze the problem? }
+
+        The authors noticed that most prior researches regarding propagation of new ideas
+        throughout a social group considered the propagation in terms of epidemiology.
+        They instead asked whether adoption of new ideas had any external effects or not.
+        So they possibly had asked these questions
+
+        \begin{enumerate}
+            \item How does information travel when not all information is not public?
+            \item How does prior knowledge about something influences the decision
+                regarding some market product?
+            \item How can social acquiantances influence the buyer's decision?
+            \item If we think about product quality as a numeric value, then which values
+                of the quality can make it a hit or a miss?
+            \item How does the quality of a product effect the preferences of a
+                population?
+            \item How should the quality of a product change after it experiences hits or
+                flops?
+        \end{enumerate}
+
+    \item \textbf{Classify the model of the system. }
+
+        The model is a discrete percolation model that uses Monte Carlo simulation.
+
+    \item \textbf{Describe the abstract model the authors came up with. }
+
+        The authors created a abstract structure for the social model by considering each
+        person being a point on a square lattice, and acquiantances being lattice
+        neighborhood. They also considered personal preferences and product quality as
+        numbers between \([0, 1]\). They also took changes in personal preferences and
+        product quality as numeric values into account to create a dynamic system.
+
+        The main simulation of this system is to take an initial product value and to
+        increment time step by step to find the minimum product value that would make the
+        product a hit. 
+        
+        The authors selected a \(2D\) lattice to best represent social connections in a
+        large city. But they conjectured that the result would be similar in other
+        dimensions as well.
+
+    \item \textbf{Describe the mathematical model model the authors came up with.  }
+
+        The authors proposed two versions of the model, a simple static version to build
+        the basis of the model, and then a dynamic model that takes changes in people's
+        preferences and product quality in account.
+
+        The static model has the following key properties:
+        \begin{enumerate}[left=0pt, itemsep=0pt]
+            \item The population would be points on a square lattice of size \(L\times
+                L\). Each person will have a preference value \(0 \le p_i\le 1\). 
+            \item The product quality will be a number \(0 \le q \le 1\).
+            \item At first there will be a subset of the populations who will have the
+                knowledge about the product. 
+            \item At every increment of time, the current subset of the population who has
+                knowledge about the product will decide whether to buy that product or
+                not, by comparing their preference value with the product value. 
+
+                That is, if \(p_i<q\) then they buy the product, if not then they don't.
+            \item If a person buys the product, then they becomes a source of knowledge,
+                and they let their neighbors on the lattice know about the product. So
+                after the time increment, the neighbors of the buyers become knowledgeable
+                about the product, and can decide whether to buy the product in the next
+                time increment.
+        \end{enumerate}
+
+        A product is labeled a `hit' if after enough time increments, there is a spanning
+        connected component in the lattice. And `flop' otherwise. Because of this, the
+        authors claim that products that falls below the percolation threshold of 
+        \(0.593\), it is a flop and if it is more than the threshold, then it is a hit.
+
+        The authors improved this static model by taking into account that people's past
+        experience with a product influences their preferences as well as the quality of a
+        product changes when it experiences hits or flops. This dynamic model has the
+        properties:
+        \begin{enumerate}[left=0pt, itemsep=0pt]
+            \item The system is updated after a product has been identified as a hit or a
+                flop.
+            \item During the update, every person who bought the previous product
+                increases their preference value by \(\delta p\) because they were
+                satisfied by their previous experience, and how have a higher expectation.
+            \item The people who did not buy the product decreases their preference valu
+                by \(\delta p \).
+            \item If the product was a hit, then the production company decreases the
+                product value by \(\delta q\) in attempt to minimize the production cost
+                while maintaining their popularity.
+            \item If the product was flop, then the production company increases the
+                product value by \(\delta q\) to reach more audience.
+        \end{enumerate}
+
+        After several simulations of the system, the authors noted that the value \(q\)
+        tends to the percolation threshold.
+
+
+    \item \textbf{Describe the system state variables of this system.}
+
+        The system state variables for this model are
+        \begin{enumerate}[left=0pt, itemsep=0pt]
+            \item The \(L\times L\) lattice which is stored in a two dimensional array.
+            \item Personal preferences \(p_i\) for each of the people on the lattice.
+            \item The initial product quality \(q\)
+            \item The values \(\delta p, \delta q\) that the dynamic model uses.
+        \end{enumerate}
+
+    \item \textbf{Name the tools and programs the authors used for the simulation.}
+
+
+
+    \item \textbf{What was the result of the simulation? What conclusions did the authors
+        draw from their simulation output?}
+
+        The authors concluded on a number of results. These can be listed in:
+        \begin{enumerate}[left=0pt, itemsep=0pt]
+            \item Firstly, the authors concluded that this percolaction model for social
+                situations produces almost identical results as observed in reality. For
+                example, the relationships between \(p_c\) and \(q\) can explain why some
+                products experience hits and some experience flops.
+            \item They also concluded that the ideal value of a product tends to the
+                percoaltion value. Meaning that production companies can work with real
+                life data to better predict their desired product value by using this
+                model.
+        \end{enumerate}
+
+
+    \item \textbf{How did the authors verify and validate their model? Write your
+        suggestions for improvement of the model.}
+
+        Based on real life explanation, and initial conjecture
+
+
+    \item \textbf{Describe a new problem relevant to the paper you want to solve by
+        modeling and simulation.}
+
+\end{enumerate}
 
 
 
