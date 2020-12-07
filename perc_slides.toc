@@ -1,0 +1,6 @@
+\babel@toc {english}{}
+\beamer@sectionintoc {1}{What is it?}{2}{0}{1}
+\beamer@sectionintoc {2}{Taking a Closer Look}{13}{0}{2}
+\beamer@subsectionintoc {2}{1}{Basic structure}{14}{0}{2}
+\beamer@subsectionintoc {2}{2}{Defining Percolation Threshold}{18}{0}{2}
+\beamer@subsectionintoc {2}{3}{Finding the Percolation Threshold}{22}{0}{2}

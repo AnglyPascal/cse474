@@ -1,10 +1,11 @@
-\documentclass[article, 11pt, a4paper]{memoir}
+\documentclass[article, 11pt, a4paper, oneside]{memoir}
 \usepackage[article, noindex, serif]{ahsan}
 
 % TODO: make a new command to set the dimensions of the margin, use ifthen
 
 \title{\vspace{-3.5em}\Large\textbf{Midterm Paper Review}\\[1em] \LARGE \textbf{Social
-Percolation Models} \\ \Large Solomon, S., Weisbuch, G., Arcangelis, L., 1999} 
+Percolation Models} \\ \Large Solomon, S., Weisbuch, G., Arcangelis, L., Jan, N.,
+Stauffer, D., 1999} 
 
 \author{M Ahsan Al Mahir\\ \small BuX ID: 20216007\\ \small GSuite: ahsan.al.mahir@g.bracu.ac.bd}
 
@@ -12,7 +13,6 @@ Percolation Models} \\ \Large Solomon, S., Weisbuch, G., Arcangelis, L., 1999}
 
 \begin{document}
 \maketitle
-
 
 The paper proposes a percolation model for simulating social recommendation situations.
 The primary question it seeks to answer is ``Why do you notice extreme market shares,
@@ -40,7 +40,7 @@ the authors proposed as a possible explanation to this question.
         The social percolation model they came up with presents a possible way to predict
         whether a product would be either a hit or a flop based on how close the quality
         of the product is to the percolation threshold of \(2D\) lattice. So by
-        understanding their model, industries can gear their investment in increasing
+        understanding their model, industries can gear their investment towards increasing
         their product quality based on the outcomes from the market.
 
     \item \textbf{What questions did the author ask to analyze the problem? }
@@ -57,7 +57,7 @@ the authors proposed as a possible explanation to this question.
             \item How can social acquiantances influence the buyer's decision?
             \item If we think about product quality as a numeric value, then which values
                 of the quality can make it a hit or a miss?
-            \item How does the quality of a product effect the preferences of a
+            \item How does the quality of a past product effect the preferences of a
                 population?
             \item How should the quality of a product change after it experiences hits or
                 flops?
@@ -140,11 +140,12 @@ the authors proposed as a possible explanation to this question.
 
         The system state variables for this model are
         \begin{enumerate}[left=0pt, itemsep=0pt]
-            \item The \(L\times L\) lattice which is stored in a two dimensional array.
+            \item The \(L \times L\) lattice which is stored in a two dimensional array.
             \item Personal preferences \(p_i\) for each of the people on the lattice.
             \item The initial product quality \(q\)
             \item The values \(\delta p, \delta q\) that the dynamic model uses.
         \end{enumerate}
+
 
     \item \textbf{Name the tools and programs the authors used for the simulation.}
 
@@ -152,6 +153,7 @@ the authors proposed as a possible explanation to this question.
         from their plots and simulation models, it can be inferred that their work can be
         reproduced using python libraries \texttt{numpy, scipy.ndimage, matplotlib.pyplot}
         and \texttt{random}.
+
 
     \item \textbf{What was the result of the simulation? What conclusions did the authors
         draw from their simulation output?}
@@ -166,6 +168,8 @@ the authors proposed as a possible explanation to this question.
                 percoaltion value. Meaning that production companies can work with real
                 life data to better predict their desired product value by using this
                 model.
+            \item Given enought time and for larger lattices, the value \(p_i\) and \(q\)
+                approaches \(p_c=0.593\)
         \end{enumerate}
 
 
@@ -188,14 +192,9 @@ the authors proposed as a possible explanation to this question.
     \item \textbf{Describe a new problem relevant to the paper you want to solve by
         modeling and simulation.}
 
-        At the end of the lecture, the authors conjectured that this model can be used to
-        estimate sales rate in products other than cinema as well. But they do not give
-        explanation about whether this same model could be implemented for childrens' toys
-        as in that scenerio, the neighborhood relationship between the children is not
-        nearly as important as their parents'. So estimating childrens' product poses a
-        new set of complexity that arises when we take both the childrens' and their
-        parents' preferences into account. In which case, the model might need heavy
-        modification to correctly estimate market shares.
+        At the end of the lecture, the authors conjectured that this model can be used to estimate sales rate in products other than cinema as well. But they do not give explanation about whether this same model could be implemented for childrens' toys as in that scenerio, the neighborhood relationship between the children is not nearly as important as their parents'. 
+
+        Estimating the sales of childrens' products poses a new set of complexity that arises when we take both the childrens' and their parents' preferences into account. In which case, the model might need heavy modification to correctly estimate market shares.
 
 \end{enumerate}
 
