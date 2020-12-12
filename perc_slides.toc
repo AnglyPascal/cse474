@@ -4,3 +4,9 @@
 \beamer@subsectionintoc {2}{1}{Basic structure}{14}{0}{2}
 \beamer@subsectionintoc {2}{2}{Defining Percolation Threshold}{18}{0}{2}
 \beamer@subsectionintoc {2}{3}{Finding the Percolation Threshold}{22}{0}{2}
+\beamer@sectionintoc {3}{Analyzing our simulation}{26}{0}{3}
+\beamer@subsectionintoc {3}{1}{Percolation Probability}{28}{0}{3}
+\beamer@subsectionintoc {3}{2}{Density of Spanning Cluster}{31}{0}{3}
+\beamer@subsectionintoc {3}{3}{One Dimensional and Infinite Dimensional Lattice}{34}{0}{3}
+\beamer@subsubsectionintoc {3}{3}{1}{One Dimension}{36}{0}{3}
+\beamer@subsubsectionintoc {3}{3}{2}{Infinite Dimension}{39}{0}{3}

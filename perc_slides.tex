@@ -8,6 +8,7 @@
 \author{Ipshita Bonhi}
 \date{\today}
 
+
 \newcommand{\imp}[1]{\textcolor{NordRed}{#1}}
 \lstset{
     numbers=left,
@@ -358,5 +359,140 @@ for p in arr:
     This will find the smallest value of \(p\) for which almost certainly random lattices
     will be percolating.
 \end{frame}
+
+
+\section{Analyzing our simulation}
+
+\begin{frame}
+    To analyze the lattices, clusters and spanning clusters, we need to define a few
+    things first.
+\end{frame}
+
+\subsection{Percolation Probability}
+
+\begin{frame}
+
+    We define \imp{\(\Pi(p, L)\)} to be the probability for there to be a cluster that
+    spans from left to right of a lattice of size \(L\times L\) as a function of \(p, L\).
+    We call it the \imp{percolation probability}.
+
+    \vspace{1em}
+
+    The next slide shows how \(\Pi(p, L)\) varies for different values of \(p\).
+\end{frame}
+
+
+\begin{frame}
+    \begin{center}
+        \includegraphics[width=\linewidth]{pLvsp.png}
+    \end{center}
+
+    The above diagram plots the values of \(\Pi(p, L)\) for \(L = 50, 100\) and \(200\).
+    Notice how the percolation probabilty gets almost equal to \(1\) starting at the
+    percolation threshold. 
+\end{frame}
+
+
+\subsection{Density of Spanning Cluster}
+
+\begin{frame}
+    We have studies the probability for there to be a spanning cluster. But what about the
+    probability for each individual cell to be in a spanning cluster?
+
+    \vspace{1em}
+
+    We define \imp{\(P(p, L)\)} to be the probability for a cell to belong to a spanning
+    cluster. We call it the \imp{density of the spanning cluster}
+
+    \vspace{1em}
+
+    The next page shows how the density of the spanning cluster varies with the value of
+    \(p\).
+\end{frame}
+
+\begin{frame}
+    \begin{center}
+        \includegraphics[width=\linewidth]{ppLvsp.png}
+    \end{center}
+
+    The above diagram plots the values of \(P(p, L)\) for \(L = 50, 100\) and \(200\).
+    Notice the steep rise in density at the percolation threshold. Also, the density is 1
+    only when \(p=1\), as then all the cells will be occupied.
+\end{frame}
+
+
+\subsection{One Dimensional and Infinite Dimensional Lattice}
+
+\begin{frame}
+    As you might've already guess that solving a percolation problem, that is, knowing all
+    the values of percolation threshold, probability or spanning cluster density
+    deterministically is close to impossible.
+
+    \vspace{1em}
+
+    But for the one dimensional case (where the sites are arranged in a line) and the
+    infinite dimensional case, the percolation problem is solvable, and easily analyzable.
+\end{frame}
+
+\subsubsection{One Dimension}
+\begin{frame}
+    The one dimensional lattice is just a straight line of lattice sites. For example, the
+    following is a 1D lattice generated randomly with the probability \(p=.6\)
+
+    \begin{center}
+        \includegraphics[width=\linewidth]{1dlattice.png}
+    \end{center}
+
+    For the \textbf{one dimensional} lattice, the percolation threshold will be \(p_c =
+    1\), because for there to be a spanning cluster from the negative infinity to the
+    positive infinity, all of the sites need to be occupied.
+
+\end{frame}
+
+\begin{frame}
+    In this case, we can also calculate the probability for a site to belong to a cluster
+    of a specific size \(s\). Which is expressed as 
+    \[P\left(\text{site belongs to a cluster of size } s\right)= s n(p, L)\] 
+    where \(n(p, L)\) is called \imp{cluster number density}. Which is the probability
+    that a site belongs to a specific location of a cluster of size \(s\).
+\end{frame}
+
+\begin{frame}
+    Using the cluster number density, we can also calculate the average size of clusters
+    in a one dimensional lattice. If we generate a random lattice with probability \(p\),
+    then the \imp{Average Cluster Size} is given by 
+    \[S(p) = \sum^{}_{s}s\left(\frac{sn(s, p)}{\sum^{}_{s} sn(s, p)}\right) \] 
+    Which just counts the sum of expected lengths of all clusters of size \(s\).
+\end{frame}
+
+\subsubsection{Infinite Dimension}
+
+\begin{frame}
+    We can also solve the percolation problem in tree like structures where there are no
+    loops. For example of one such tree, below is the \imp{Bethe Lattice}, also called as
+    the \imp{Cayley Tree}, which is a tree structure where every node has \(Z\) neighbors.
+
+
+    \begin{center}
+        \includegraphics[width=.8\linewidth]{bethe.png}
+    \end{center}
+
+    In this tree, every node has \(3\) neighbors.
+\end{frame}
+
+\begin{frame}
+    In such a tree, to have a spanning cluster, we must ensure that for each occupied node
+    on that cluster to have one occupied neighbor. 
+
+    \vspace{1em}
+
+    If we start from the center of the tree and move along a branch, we will generate
+    \(Z-1\) new neighbors every turn. So we just need to ensure that one of those
+    neighbors are occupied. Because of this, our percolation threshold becomes
+
+    \[p_c=\frac{1}{Z-1}\] 
+\end{frame}
+
+
 
 \end{document}
